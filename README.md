@@ -120,4 +120,4 @@ Improve a skill by editing its `SKILL.md`. Keep the description specific about *
 
 ## License
 
-Add a license of your choice (for example MIT) as `LICENSE` before sharing publicly.
+Released under the MIT License. See [LICENSE](LICENSE).
