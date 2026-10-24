@@ -1,24 +1,123 @@
-# SDLC Skills Pack - a full software company as Claude skills
+# SDLC Skills Pack
 
-20 skills that take an application from idea to production and operations. Start with `sdlc-orchestrator`; it loads the right role at each phase and enforces gates.
+**A full software company, packaged as 20 Claude skills.** Give Claude an idea and it works through discovery, design, build, test, security, release and operations the way a real company would, with the right specialist role at each step and a quality gate before moving on.
 
-| Function | Skill |
-|---|---|
-| Orchestration | `sdlc-orchestrator` |
-| Product | `product-manager`, `business-analyst`, `end-user-uat` |
-| Design | `ux-ui-designer` |
-| Delivery and leadership | `project-manager-scrum-master`, `engineering-manager-tech-lead` |
-| Architecture and engineering | `architect`, `developer`, `data-engineer`, `ai-ml-engineer` |
-| Quality | `qa-engineer`, `performance-engineer` |
-| Security and governance | `security-engineer`, `compliance-privacy-officer` |
-| Platform and reliability | `devops-engineer`, `sre-incident-manager`, `release-manager` |
-| Docs and customers | `technical-writer`, `support-customer-success` |
+```
+Idea ──► Discover ──► Design ──► Plan ──► Build ──► Verify ──► Release ──► Operate & Learn
+          (gate)      (gate)     (gate)   (gate)     (gate)     (gate)         │
+            ▲                                                                   │
+            └───────────────────── feedback from users and incidents ◄─────────┘
+```
+
+## What is a skill?
+
+A skill is a folder containing a `SKILL.md` file: written instructions that teach Claude how to do one kind of work well.
+
+1. **Always loaded:** only each skill's short `name` and `description` (the header at the top of `SKILL.md`). This is how Claude knows which skills exist.
+2. **Loaded on demand:** when your request matches a description, Claude reads that skill's full instructions and follows them.
+3. **Extras (optional):** a skill can bundle templates, scripts or reference files that Claude reads only when needed.
+
+This keeps Claude fast and focused: it carries 20 short descriptions, but only reads the detailed playbook for the role it is playing right now.
+
+## How this pack works
+
+There are two ways to use it.
+
+**1. Whole-company mode.** Ask Claude to use the orchestrator:
+
+> Use sdlc-orchestrator to build a booking app for dog groomers.
+
+The orchestrator:
+1. Checks the project state (docs, code, tests, CI) and resumes at the earliest phase whose gate is not yet met.
+2. Puts on the right role for the current phase and loads that role's skill (for example `product-manager` during Discover, `architect` during Design).
+3. Produces that phase's deliverables, such as a PRD, architecture doc, ADRs, test plan, threat model or runbooks, in a `docs/` folder.
+4. Checks the **exit gate**. If it is not met, it stays in the phase or loops back instead of pushing ahead.
+5. Summarizes at each gate: what was done, evidence, open risks, decision needed, next step. It only asks you for decisions that are genuinely yours (scope, budget, compliance, risk acceptance) and records its own defaults as decision records.
+6. Keeps a living `docs/PROJECT_STATUS.md` so work can pause and resume across sessions.
+
+**2. Single-role mode.** Call one role directly when you only need that expertise:
+
+> As the security-engineer, threat-model this design.
+> Act as the qa-engineer and write a test plan for the checkout flow.
+> Use the devops-engineer skill to set up CI/CD for this repo.
+
+## The phases and gates
+
+| # | Phase | Roles involved | Exit gate (must be true to advance) |
+|---|---|---|---|
+| 1 | Discover | product-manager, end-user-uat, business-analyst | Problem, personas, success metrics, scope and non-goals agreed; requirements testable and traced |
+| 2 | Design | ux-ui-designer, architect, security-engineer, data-engineer, compliance-privacy-officer, ai-ml-engineer | Architecture, API and data reviewed; measurable non-functional requirements; threat model with mitigations; privacy obligations mapped |
+| 3 | Plan | project-manager-scrum-master, engineering-manager-tech-lead, release-manager | Thin-slice backlog sequenced by risk; Definition of Done and standards set; repo and CI skeleton exist |
+| 4 | Build | developer, data-engineer, ai-ml-engineer (+ QA, security, docs in parallel) | Per slice: Definition of Done met, CI green, docs updated |
+| 5 | Verify | qa-engineer, performance-engineer, security-engineer, end-user-uat | No open Critical/High defects; performance budgets met; scans clean; user acceptance recorded |
+| 6 | Release | release-manager, devops-engineer, sre-incident-manager, support-customer-success | Go/no-go evidence from every function; rollback rehearsed; monitoring, on-call and support ready; backup restore verified |
+| 7 | Operate & Learn | sre-incident-manager, devops-engineer, support-customer-success, product-manager | SLOs met; postmortem actions closed; metrics and user feedback flow back into Discover |
+
+Gates exist because a defect caught in requirements costs minutes, while the same defect caught in production costs days.
+
+## The roles
+
+| Function | Skill | What it does |
+|---|---|---|
+| Orchestration | `sdlc-orchestrator` | Runs the phases, enforces gates, coordinates all roles |
+| Product | `product-manager` | Vision, strategy, roadmap, prioritization, metrics, go-to-market |
+| | `business-analyst` | Detailed requirements, use cases, business rules, traceability |
+| | `end-user-uat` | Personas, PRD, user stories, acceptance criteria, user acceptance testing |
+| Design | `ux-ui-designer` | User flows, wireframes, design system, accessibility |
+| Delivery | `project-manager-scrum-master` | Planning, estimation, sprints, risks, status reporting |
+| | `engineering-manager-tech-lead` | Engineering standards, tech debt, team practices, hiring |
+| Engineering | `architect` | Architecture, non-functional requirements, API and data design, ADRs |
+| | `developer` | Scaffolding, implementation, tests, pull requests, code review |
+| | `data-engineer` | Schemas, migrations, pipelines, analytics, data quality |
+| | `ai-ml-engineer` | ML and LLM features, RAG, evals, MLOps, responsible AI |
+| Quality | `qa-engineer` | Test strategy, automation, defect management, release sign-off |
+| | `performance-engineer` | Performance budgets, profiling, load testing, capacity |
+| Security | `security-engineer` | Threat modeling, secure design, scanners in CI, vulnerability management |
+| | `compliance-privacy-officer` | GDPR/CCPA, SOC 2, ISO 27001, HIPAA, PCI, licensing, audit evidence |
+| Platform | `devops-engineer` | CI/CD, infrastructure as code, environments, observability, backups |
+| | `sre-incident-manager` | SLOs, on-call, incident response, blameless postmortems |
+| | `release-manager` | Versioning, changelogs, go/no-go, rollout and rollback |
+| Docs & customers | `technical-writer` | README, API and user docs, runbooks, release notes |
+| | `support-customer-success` | Support readiness, ticket triage, knowledge base, feedback loop |
+
+## Example: what you get at each step
+
+For the prompt "Use sdlc-orchestrator to build a booking app for dog groomers", expect roughly:
+
+1. **Discover:** a few focused questions (who are the users, what counts as success, constraints), then `docs/prd.md`, personas, user stories with Given/When/Then acceptance criteria, and a prioritized MVP.
+2. **Design:** `docs/architecture.md` with diagrams, an OpenAPI spec, a data model, a threat model, a UX flow and design tokens, and decision records for stack choices.
+3. **Plan:** a sequenced backlog of thin vertical slices, a repo scaffold with linting, tests and CI, and a Definition of Done.
+4. **Build and Verify:** code delivered slice by slice with tests, security scans, performance checks and an accessibility review, ending in a QA sign-off report.
+5. **Release and Operate:** deployment pipeline and infrastructure code, dashboards, alerts, runbooks, rollback plan, release notes and support articles.
 
 ## Install
-Copy the folders into your Claude skills directory (each folder contains a `SKILL.md`), or package them with the skill-creator `package_skill` script and upload the `.skill` files.
 
-## Use
-"Use sdlc-orchestrator to build <your app>." Or call a role directly: "As the security-engineer, threat-model this design."
+Each skill is a folder with a `SKILL.md`. Install the folders you want (all 20 for the full company).
 
-## Notes
-Compliance guidance is practical engineering support, not legal advice. Add stack-specific reference files (for example Next.js + Postgres on AWS) under each skill's `references/` folder to tailor it.
+- **Claude Code:** copy the folders into `~/.claude/skills/` (personal) or `<your-project>/.claude/skills/` (per project).
+- **Claude.ai / desktop app:** zip a skill folder (or package it as a `.skill` file) and upload it under the Skills settings.
+
+```bash
+git clone https://github.com/dhonitheja/sdlc-skills
+cp -r sdlc-skills/*/ ~/.claude/skills/     # skills only; ignore README
+```
+
+## Customize
+
+- **Stack-specific:** add a `references/` folder inside a skill (for example `developer/references/nextjs-postgres.md`) and mention it in that skill's `SKILL.md`, so Claude reads it only when relevant.
+- **Company standards:** edit the Definition of Done, severity levels, SLAs or coding standards in the matching skill to reflect your organization.
+- **Scale down:** for a small project, install only the roles you need; keep at least the orchestrator, product, architect, developer, QA, security and DevOps skills.
+
+## Limits
+
+- The skills guide Claude's work and produce documents, code and plans; they do not replace human review, legal counsel or an independent security audit. `compliance-privacy-officer` gives engineering support, not legal advice.
+- Quality depends on the context you provide. Answer the discovery questions honestly; vague inputs produce generic outputs.
+- Gates are only as strong as the evidence behind them. Review the gate summaries rather than approving blindly.
+
+## Contributing
+
+Improve a skill by editing its `SKILL.md`. Keep the description specific about *when* to trigger, keep the body under about 500 lines, explain the reason behind each rule, and move long reference material into a `references/` folder.
+
+## License
+
+Add a license of your choice (for example MIT) as `LICENSE` before sharing publicly.
