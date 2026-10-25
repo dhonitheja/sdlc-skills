@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: subtle-vulns-and-decoys
+expected_outcome: |
+  Finds the unsafe pickle deserialization of the session cookie (the most severe), the path traversal in read_upload, and the unrestricted URL fetch (SSRF). Does not flag the decoys (random used for a non-secret cache key, hmac.compare_digest, yaml.safe_load) as problems. Orders findings by severity and recommends not merging until fixed.
+context:
+  scaffold_script: place-files.sh

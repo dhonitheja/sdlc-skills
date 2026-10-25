@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: resume-with-unmet-gate
+expected_outcome: |
+  Reads the project status, notices that the Design-phase threat model gate was never met even though Build has started (and that slice 3 handles payments), reports the gate states with evidence, and either holds slice 3 until the threat model exists or records an explicit waiver request from the owner, instead of silently continuing to code. Keeps the process proportionate.
+context:
+  scaffold_script: place-files.sh

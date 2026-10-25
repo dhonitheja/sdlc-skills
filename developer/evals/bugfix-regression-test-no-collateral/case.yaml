@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: bugfix-regression-test-no-collateral
+expected_outcome: |
+  Writes a test that fails on exactly 10 items, makes the minimal fix to the bulk discount threshold, runs the whole test suite, and leaves free_shipping alone because its strict greater-than matches the README. Light process for a small bug fix.
+context:
+  scaffold_script: place-files.sh

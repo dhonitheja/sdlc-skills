@@ -1,0 +1,17 @@
+name: CI
+on: [push]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - uses: some-org/setup-tools@main
+      - run: pip install -r requirements.txt
+      - run: python -m unittest discover || true
+        env:
+          API_TOKEN: ${{ secrets.API_TOKEN }}
+      - run: python lint.py
+        continue-on-error: true
+      - run: echo "using token $API_TOKEN"
+        env:
+          API_TOKEN: ${{ secrets.API_TOKEN }}

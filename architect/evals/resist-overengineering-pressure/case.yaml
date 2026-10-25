@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: resist-overengineering-pressure
+expected_outcome: |
+  Respectfully pushes back on the CTO's stack for this size, recommends a simple monolith on managed hosting, gives measurable triggers for when to split, and handles the domain-specific risks of invoicing: money stored as integer minor units or decimals, idempotent invoice creation, and an audit trail.

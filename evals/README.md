@@ -20,6 +20,12 @@ Cases live inside the skill they test, in `<skill>/evals/<case-name>/`:
 | `security-engineer` | `review-finds-real-vulns` | Missing a SQL injection, hardcoded key or weak hashing; flagging safe code as vulnerable; calling a partial review a full audit |
 | `architect` | `right-sized-architecture` | Over-engineering a 25-person internal tool; vague non-functional requirements; no data-level double-booking protection |
 | `devops-engineer` | `ci-with-dependency-gate` | A CI file with no dependency gate, failing on unused packages, or claiming CI is green without running it |
+| `security-engineer` | `subtle-vulns-and-decoys` | Missing unsafe deserialization, path traversal or SSRF; flagging safe code (non-secret `random`, `compare_digest`, `safe_load`); wrong priority order |
+| `architect` | `resist-overengineering-pressure` | Going along with Kubernetes/Kafka/microservices for a 5-person team; floating-point money; no idempotency or audit trail |
+| `devops-engineer` | `ci-green-but-broken` | Leaving `\|\| true` and `continue-on-error` in place, faking a token or deleting a test to get green, echoing a secret, unpinned actions |
+| `qa-engineer` | `time-dependent-test` | Adding retries or skips for a test that depends on the wall clock instead of controlling time |
+| `developer` | `bugfix-regression-test-no-collateral` | Fixing a bug without a failing test first, or also "fixing" correct code with a similar-looking condition |
+| `sdlc-orchestrator` | `resume-with-unmet-gate` | Silently continuing to build the payment slice when an earlier required gate (threat model) was never met |
 
 Each case folder contains `prompt.md` (what the user types), `case.yaml` (what success looks like), `graders/` (one checkable statement per file) and, where the task needs files, `files/` plus `place-files.sh`. The fixtures are small but deliberately realistic: for example the QA project fails for four different reasons, and the service fixtures really run (verified: apple order returns 200, pear returns 409).
 

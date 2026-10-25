@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: time-dependent-test
+expected_outcome: |
+  Finds that the test (and code) depend on the wall clock, reproduces the failure by simulating a time outside business hours, and fixes it by making the time injectable or frozen in the test, covering both open and closed cases. Does not add retries, skip the test, or loosen the assertion.
+context:
+  scaffold_script: place-files.sh
