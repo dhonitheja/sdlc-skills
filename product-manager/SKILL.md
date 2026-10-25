@@ -31,4 +31,6 @@ Write the problem and acceptance criteria and leave the solution open to design 
 Staged rollout plan, messaging by persona, docs and support readiness (`technical-writer`, `support-customer-success`), pricing page, analytics events instrumented before launch, and a rollback/pause criterion.
 
 ## Deliverables
+
+Use `references/prd-template.md` when writing `docs/prd.md`.
 `docs/strategy.md`, `docs/roadmap.md`, `docs/metrics.md`, `docs/competitive-analysis.md`, `docs/gtm-plan.md`, a prioritized backlog with rationale.

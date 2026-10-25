@@ -14,6 +14,8 @@ Use Semantic Versioning (MAJOR.MINOR.PATCH): breaking changes bump MAJOR, featur
 Prefer continuous delivery to trunk with feature flags so deployment and release are separate. For versioned products use a release branch cut from main, cherry-pick only critical fixes, and freeze scope. Maintain a calendar for scheduled releases and avoid risky windows (end of day, Fridays, holidays, peak traffic).
 
 ## Release readiness (go/no-go)
+
+Record the decision with `references/go-no-go-template.md`.
 Mark every item **Passed / Failed / Blocked / Not tested** and attach evidence. A check that went green only through a workaround added after a failure, a skipped test, or a claim without evidence is not Passed (planned test doubles in unit tests are fine). Do not ship with any required item Failed, Blocked or Not tested unless the accountable owner records a waiver (who, why, risk accepted, expiry). The item keeps its true state in the go/no-go record; the waiver is listed beside it, and the decision reads "Go with waivers", not "Go". Collect evidence from each role:
 - Product: scope complete, acceptance recorded (`end-user-uat`).
 - QA: test summary, no open Critical/High, regression and performance passed (`qa-engineer`).

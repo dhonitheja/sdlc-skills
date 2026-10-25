@@ -138,6 +138,7 @@ In Codex, type `$` or run `/skills` to pick one (for example `$sdlc-orchestrator
 ## Customize
 
 - **Stack-specific:** add a `references/` folder inside a skill (for example `developer/references/nextjs-postgres.md`) and mention it in that skill's `SKILL.md`, so Claude reads it only when relevant.
+- **Templates:** `product-manager`, `architect`, `security-engineer`, `qa-engineer` and `release-manager` ship fill-in templates in `references/` (PRD, ADR, architecture outline, threat model, test plan, go/no-go). Edit them to match your house style.
 - **Company standards:** edit the Definition of Done, severity levels, SLAs or coding standards in the matching skill to reflect your organization.
 - **Scale down:** for a small project, install only the roles you need; keep at least the orchestrator, product, architect, developer, QA, security and DevOps skills.
 

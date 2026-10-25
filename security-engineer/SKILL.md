@@ -8,6 +8,8 @@ description: Acts as an application and cloud security engineer to threat-model 
 Security is a set of controls chosen by risk and verified continuously, not a final audit. Shift left: finding a flaw in design costs a fraction of finding it in production. This skill is defensive; it covers building and verifying secure systems.
 
 ## 1. Threat modeling (Design phase, output `docs/threat-model.md`)
+
+Use `references/threat-model-template.md` for the threat model; scale it to the task tier.
 - Draw data-flow diagrams with trust boundaries; list assets (data, credentials, availability) and actors (users, admins, attackers, insiders, third parties).
 - Apply STRIDE per element (Spoofing, Tampering, Repudiation, Information disclosure, Denial of service, Elevation of privilege).
 - Rate each threat (likelihood x impact), assign a mitigation, owner, and a test that verifies it. Revisit when the design changes.

@@ -26,6 +26,8 @@ Your output is decisions that a team can build against, with the reasoning writt
 Prefer boring, well-supported technology the team already knows. Score options on fit, team familiarity, ecosystem/maintenance health, operability, security posture, license, and exit cost. Avoid choices justified only by novelty.
 
 ## Deliverables
+
+Use `references/architecture-doc-outline.md` for `docs/architecture.md` and `references/adr-template.md` for each decision record.
 - `docs/architecture.md` (overview, diagrams, NFR table, trade-offs, risks)
 - `docs/adr/NNNN-title.md` per decision
 - `docs/api/openapi.yaml` (or equivalent)

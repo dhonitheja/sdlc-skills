@@ -44,6 +44,8 @@ Verdict: Passed | Passed with workaround | Failed | Blocked | Not tested
 ```
 
 ## Test strategy (write `docs/test-plan.md`)
+
+Start from `references/test-plan-template.md`; it has a place for planned mocks and the failure-path list.
 Scale the strategy to the task (see the sizing note in `developer`): a one-line bug fix needs a regression test and a relevant run, not a full plan.
 1. **Scope and risk:** list features by business impact x likelihood of failure; spend effort in proportion.
 2. **Test pyramid:** many fast unit tests, fewer integration/API tests, a small set of end-to-end tests for critical user journeys.
