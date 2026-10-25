@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: uat-for-real-users
+expected_outcome: |
+  A UAT plan that uses representative users (not the dev team), task-based scenarios with clear success criteria, accessibility considerations, a defined pass/fail and sign-off rule with defect severity, and safe handling of test data.

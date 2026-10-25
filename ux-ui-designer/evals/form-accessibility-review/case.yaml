@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: form-accessibility-review
+expected_outcome: |
+  Finds the placeholder-only labels, the clickable div used as a submit button (not keyboard accessible, not a button), the password field shown as plain text, low-contrast placeholder text (#aaaaaa on white is about 2.3:1), and the unlinked error message that is not announced. Gives concrete fixes and does not claim to be a complete WCAG audit.
+context:
+  scaffold_script: place-files.sh

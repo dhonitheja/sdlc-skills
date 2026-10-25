@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: blameless-postmortem
+expected_outcome: |
+  A blameless postmortem that keeps the facts from the notes and invents none (customer count is unknown), separates root cause from contributing factors (no canary, alert routed to the wrong team, slow detection), avoids blaming Sam, and has action items with owners, due dates and a way to verify them.
+context:
+  scaffold_script: place-files.sh

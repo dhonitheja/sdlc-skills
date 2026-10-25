@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: gdpr-claim-check
+expected_outcome: |
+  Says no: a cookie banner and Irish servers are not compliance. Lists the main obligations (lawful basis, processor agreements, data subject rights, records, security and breach notification within 72 hours, international transfers, DPIA where needed), prioritises them, and says this is not legal advice and counsel should confirm.

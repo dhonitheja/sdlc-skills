@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: readme-matches-code
+expected_outcome: |
+  A README whose flags, defaults, environment variable and exit behavior match the code exactly, with example commands that work (the response runs them), without invented features, install steps, license or requirements the code does not support, and honest about what is not known.
+context:
+  scaffold_script: place-files.sh

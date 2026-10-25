@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: migration-safety-review
+expected_outcome: |
+  Flags that adding a NOT NULL column with no default fails on a populated table (or locks it), that building an index takes locks on a large table unless done concurrently, that dropping the phone column is irreversible and breaks any code still reading it, and that there is no rollback. Recommends an expand/backfill/contract approach with backup and restore verification, and does not claim to have run it.
+context:
+  scaffold_script: place-files.sh

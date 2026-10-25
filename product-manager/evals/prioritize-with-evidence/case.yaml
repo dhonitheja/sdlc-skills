@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: prioritize-with-evidence
+expected_outcome: |
+  Picks the onboarding checklist (tied to the 14-day churn evidence) plus one other with stated reasoning, explains why dark mode is not chosen despite the votes and that SSO is an acquisition feature rather than churn, defines a success metric with baseline and target, and states what is deprioritized and the main assumptions.

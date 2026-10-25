@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: ambiguous-requirement
+expected_outcome: |
+  Does not just restate the sentence. Surfaces the ambiguities (when cancellation is allowed, refunds, partial cancellation, who can cancel), states assumptions or open questions, and writes testable acceptance criteria that include edge cases such as an already-shipped order and pending payment.

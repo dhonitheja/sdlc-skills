@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: weak-load-test-claim
+expected_outcome: |
+  Says no and explains why: too small, too short, staging not production-like, the average hides tail latency, and no workload model. Defines what test would support the claim, with percentile targets, ramp, soak and realistic user behavior.

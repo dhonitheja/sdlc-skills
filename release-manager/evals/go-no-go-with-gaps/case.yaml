@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: go-no-go-with-gaps
+expected_outcome: |
+  Does not give an unconditional go. Identifies the irreversible migration as the thing that makes rollback unreliable, uses explicit check states, lists what must be done before a go (forward-fix plan or backup, rehearsal, support and changelog), mentions a staged rollout or feature flag, and says only the accountable owner can waive a gap.

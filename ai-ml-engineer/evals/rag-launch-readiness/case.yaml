@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: rag-launch-readiness
+expected_outcome: |
+  Says five demo questions are not enough evidence, proposes an evaluation set that includes unanswerable and adversarial questions with metrics such as groundedness and correct refusal, requires safeguards (citations, I-don't-know, escalation to HR, privacy and prompt injection), and recommends a staged rollout with monitoring and rollback.

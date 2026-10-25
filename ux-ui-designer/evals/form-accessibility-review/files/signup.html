@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+<head><title>Sign up</title>
+<style>
+  body { background: #ffffff; font-family: sans-serif; }
+  input { color: #333; }
+  ::placeholder { color: #aaaaaa; }
+  .err { color: red; font-size: 11px; }
+  .btn { background: #4a90d9; color: #ffffff; padding: 8px 16px; cursor: pointer; }
+</style>
+</head>
+<body>
+  <h2>Create your account</h2>
+  <form>
+    <input type="text" placeholder="Full name" autofocus>
+    <input type="text" placeholder="Email">
+    <input type="text" placeholder="Password (min 8 characters)">
+    <div class="err" id="err">Something went wrong</div>
+    <div class="btn" onclick="submitForm()">Sign up</div>
+  </form>
+  <script>function submitForm(){ document.getElementById('err').style.display='block'; }</script>
+</body>
+</html>

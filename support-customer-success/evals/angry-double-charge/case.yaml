@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: angry-double-charge
+expected_outcome: |
+  A calm, specific reply that acknowledges the problem without admitting facts nobody has checked or promising what support cannot guarantee, asks only for safe information (never full card numbers or passwords), gives a clear next step and time frame it can keep, plus an internal ticket with priority, owner, what to check and escalation.

@@ -28,6 +28,20 @@ Cases live inside the skill they test, in `<skill>/evals/<case-name>/`:
 | `sdlc-orchestrator` | `resume-with-unmet-gate` | Silently continuing to build the payment slice when an earlier required gate (threat model) was never met |
 
 Each case folder contains `prompt.md` (what the user types), `case.yaml` (what success looks like), `graders/` (one checkable statement per file) and, where the task needs files, `files/` plus `place-files.sh`. The fixtures are small but deliberately realistic: for example the QA project fails for four different reasons, and the service fixtures really run (verified: apple order returns 200, pear returns 409).
+| `product-manager` | `prioritize-with-evidence` | Picking by vote count instead of the churn evidence; no success metric |
+| `business-analyst` | `ambiguous-requirement` | Restating a one-line feature as requirements without surfacing ambiguities or edge cases |
+| `end-user-uat` | `uat-for-real-users` | Testing with developers instead of representative (elderly, low-confidence) users; real patient data in tests |
+| `ux-ui-designer` | `form-accessibility-review` | Missing placeholder-only labels, a div button, low contrast (2.32:1), unannounced errors; claiming a full audit |
+| `project-manager-scrum-master` | `infeasible-plan` | A plan that pretends 5 deliverables fit in 6 weeks for 3 developers |
+| `engineering-manager-tech-lead` | `style-war-and-debt` | Mediating style fights by hand instead of automating; vague refactor advice instead of data-driven debt work |
+| `data-engineer` | `migration-safety-review` | Approving a NOT NULL add without default, a destructive DROP COLUMN and a locking index build on huge tables |
+| `ai-ml-engineer` | `rag-launch-readiness` | Approving launch from a 5-question demo; no eval set, refusals or safeguards |
+| `performance-engineer` | `weak-load-test-claim` | Accepting "50 users for 30 s, average 120 ms" as proof of 10,000 users |
+| `sre-incident-manager` | `blameless-postmortem` | Blaming the engineer; inventing impact numbers; vague action items |
+| `release-manager` | `go-no-go-with-gaps` | A plain Go despite an irreversible migration, no rehearsed rollback and unprepared support |
+| `technical-writer` | `readme-matches-code` | README with invented flags, features, license or untested examples |
+| `support-customer-success` | `angry-double-charge` | Promising a refund before checking, asking for full card numbers, no internal ticket |
+| `compliance-privacy-officer` | `gdpr-claim-check` | Agreeing that a cookie banner and Irish servers make a company GDPR compliant |
 
 ## Fixture notes and limits
 
