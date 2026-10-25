@@ -14,7 +14,17 @@ Make shipping safe, repeatable and boring, and make production observable and re
 Multi-stage Dockerfile, minimal base image, pinned versions/digests, non-root user, `.dockerignore`, healthcheck, graceful shutdown on SIGTERM, one process per container, build cache optimization. Scan images in CI.
 
 ## 3. CI pipeline (on every PR)
-checkout → restore cache → install (locked) → lint/format/type-check → unit tests → integration tests (service containers) → build → security scans (see `security-engineer`) → coverage and quality gate → publish artifacts/images with immutable tags (git SHA) and SBOM. Keep it under ~10 minutes; parallelize; fail fast. Protect `main` (required checks, reviews, no force-push).
+checkout → restore cache → install (locked, **in a clean environment**) → **dependency check** → lint/format/type-check → unit tests → integration tests (service containers) → build → security scans (see `security-engineer`) → coverage and quality gate → publish artifacts/images with immutable tags (git SHA) and SBOM. Keep it under ~10 minutes; parallelize; fail fast. Protect `main` (required checks, reviews, no force-push).
+
+**Size the pipeline to the work.** A script or prototype needs lint plus tests; a production service needs the full pipeline. Do not build staging, canary, or on-call machinery for something nobody operates, and do not skip it for something customers depend on.
+
+**Dependency and environment checks (make CI enforce them):**
+- A job that installs only from the lockfile into a clean container/virtualenv, so undeclared packages fail the build instead of working by accident on one machine.
+- A declared-vs-imported check (Python `deptry`, Node `depcheck`, Go `go mod tidy -diff`) that fails on missing or unused dependencies.
+- A preflight step that verifies required tools, environment variables, secrets, and service reachability, and prints a clear **cause** when something is absent: *missing dependency*, *missing secret*, *network blocked*, *service down*. Do not let a skipped or blocked job show as a green check; mark it explicitly as skipped/blocked and require a decision.
+- Never "fix" a red pipeline by silencing the check, retrying until green, or adding `|| true`. Record flaky jobs and quarantine them with a ticket.
+
+**Running several services locally or in test:** one process (or container) per service, each with its own dependencies, port, working directory, health check, and logs; no shared interpreter or shared module path between services, because same-named modules (`config`, `utils`, `app`) collide when loaded together. Start with `docker compose` or a documented script, wait for health, run the tests, and tear everything down.
 
 ## 4. CD pipeline
 Build once → deploy to staging automatically → run smoke/E2E and DB migration checks → manual or policy approval → production rollout. Use progressive delivery: **rolling** (default), **blue-green** (fast rollback), or **canary** (risk-sensitive) with automatic rollback on SLO breach. Run database migrations with expand/contract so old and new versions coexist. Use feature flags to decouple deploy from release. Authenticate to cloud with OIDC federation, not stored keys.
@@ -45,6 +55,7 @@ Health/readiness probes, autoscaling with limits, multi-AZ, timeouts/retries/cir
 Deployment frequency, lead time for changes, change failure rate, time to restore service. Use them to find bottlenecks, not to rank people.
 
 ## Production go-live checklist
+Record each item as **Passed / Failed / Blocked / Not tested** with evidence (command output, link, screenshot). An item that needed a workaround is not Passed.
 - [ ] IaC applied cleanly; staging mirrors production
 - [ ] Pipeline deploys and rolls back successfully (rollback rehearsed)
 - [ ] Secrets in manager, rotated, none in code or images

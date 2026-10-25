@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: ui-tests-failure-paths
+expected_outcome: |
+  A Playwright test file that covers the success case and the failure paths of the form: a 500 response, a network failure, the visible error message, and the retry button succeeding after a failure. Selectors use roles and labels, not CSS chains, and there are no fixed sleeps. If the tests could not be executed in the environment, the response says so instead of claiming they pass.
+context:
+  scaffold_script: place-files.sh

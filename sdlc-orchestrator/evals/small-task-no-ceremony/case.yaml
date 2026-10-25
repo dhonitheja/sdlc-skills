@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: small-task-no-ceremony
+expected_outcome: |
+  The response treats this as a trivial local change: it edits the year and reports it. It does not start phases, write a PRD or status file, ask discovery questions, require a PR, telemetry or staging deployment, or produce a gate summary.
+context:
+  scaffold_script: place-files.sh

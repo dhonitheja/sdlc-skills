@@ -90,6 +90,17 @@ For the prompt "Use sdlc-orchestrator to build a booking app for dog groomers", 
 4. **Build and Verify:** code delivered slice by slice with tests, security scans, performance checks and an accessibility review, ending in a QA sign-off report.
 5. **Release and Operate:** deployment pipeline and infrastructure code, dashboards, alerts, runbooks, rollback plan, release notes and support articles.
 
+## How reliable are the results?
+
+The skills enforce evidence-based reporting and scale the process to the task:
+
+- **Honest test reporting:** failures are sorted into application bug, test defect, missing dependency, or environment restriction. A test that passed only through a workaround is never reported as a clean pass, and the original failure stays visible.
+- **Gate states:** every gate check is **Passed / Failed / Blocked / Not tested**, and only Passed advances, with evidence attached.
+- **Task-size tiers:** a typo fix does not trigger PRs, telemetry or staging deployment; new products and high-risk changes get the full process.
+- **Dependency and environment checks:** imports are compared with declared dependencies, installs are verified in a clean environment, and services run in separate processes.
+
+Whether these changes actually improve Claude's behavior is measured with the cases in [`evals/`](evals/README.md) (with-skill vs baseline). That comparison has not been run yet; see `evals/RESULTS.md` for status.
+
 ## Install
 
 Each skill is a folder with a `SKILL.md`. Install the folders you want (all 20 for the full company).

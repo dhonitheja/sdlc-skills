@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: gate-needs-evidence
+expected_outcome: |
+  The response holds the release. It lists each check with a state: the skipped integration tests as Blocked or Not tested (not passed), the payment tests as passed only with a workaround so not a pass, and the security scan as Not tested. It asks for evidence rather than accepting claims, uses the Passed / Failed / Blocked / Not tested vocabulary, and gives concrete next steps. Only the user may waive a check.
