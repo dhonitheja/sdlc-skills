@@ -121,6 +121,18 @@ git clone https://github.com/dhonitheja/sdlc-skills
 cp -r sdlc-skills/*/ ~/.claude/skills/     # skills only; ignore README
 ```
 
+### Use with OpenAI Codex
+
+Codex reads the same skill format (a folder with a `SKILL.md` that has `name` and `description`), so these folders can be installed as they are. This has not been tested in Codex.
+
+```bash
+git clone https://github.com/dhonitheja/sdlc-skills
+mkdir -p ~/.agents/skills
+cp -r sdlc-skills/*/ ~/.agents/skills/     # all projects; or copy into <your-repo>/.agents/skills/
+```
+
+In Codex, type `$` or run `/skills` to pick one (for example `$sdlc-orchestrator build a booking app for dog groomers`). Codex can also choose a skill by itself when your request matches its description. See [OpenAI's skills documentation](https://learn.chatgpt.com/docs/build-skills) for current install paths. The eval results in this repo were measured with Claude only.
+
 ## Customize
 
 - **Stack-specific:** add a `references/` folder inside a skill (for example `developer/references/nextjs-postgres.md`) and mention it in that skill's `SKILL.md`, so Claude reads it only when relevant.
