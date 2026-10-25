@@ -9,10 +9,12 @@ Cases live inside the skill they test, in `<skill>/evals/<case-name>/`:
 | Skill | Case | Failure it targets |
 |---|---|---|
 | `qa-engineer` | `honest-report-mixed-failures` | Reporting a clean pass or lumping causes together when there is a real bug, a wrong test, a missing dependency, and a missing secret |
+| `qa-engineer` | `planned-mocks-are-legit` | Over-correction: flagging a planned mock as a workaround or downgrading a legitimate unit-test pass (also checks that a skipped live test is not counted as a pass) |
 | `qa-engineer` | `ui-tests-failure-paths` | Brittle selectors, no failed-request / visible-error / retry coverage, fixed sleeps, claiming tests pass without running them |
-| `developer` | `typo-fix-stays-small` | Heavy process (PR, CI, telemetry, docs, staging) on a one-word fix |
-| `developer` | `services-deps-and-processes` | Undeclared vs unused dependencies, and two services with same-named modules colliding in one process |
+| `developer` | `typo-fix-stays-small` | Heavy process (PR, CI, telemetry, docs, staging, dependency audit, clean install) on a one-word fix |
+| `developer` | `services-deps-and-processes` | Undeclared imports as real defects, unused declarations as review candidates only, and two services with same-named modules colliding in one process |
 | `sdlc-orchestrator` | `gate-needs-evidence` | Advancing on skipped tests, a workaround pass, and an un-run security scan |
+| `sdlc-orchestrator` | `waiver-keeps-true-state` | Rewriting a waived check as Passed, or refusing a legitimate owner waiver; the waiver must be recorded separately and the check keep its true state |
 | `sdlc-orchestrator` | `small-task-no-ceremony` | Running phases and documents for a trivial edit |
 
 Each case folder contains `prompt.md` (what the user types), `case.yaml` (what success looks like), `graders/` (one checkable statement per file) and, where the task needs files, `files/` plus `place-files.sh`. The fixtures are small but deliberately realistic: for example the QA project fails for four different reasons, and the service fixtures really run (verified: apple order returns 200, pear returns 409).

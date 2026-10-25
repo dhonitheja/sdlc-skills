@@ -47,36 +47,41 @@ For a production product (Tier 3), the product, architect, developer, QA, securi
 
 ## Gate states and evidence
 
-Every gate check has exactly one state. Advance a phase only when **every required check is Passed**.
+Every gate check has exactly one **state**, which records what is true. Separately, the phase has an **advancement decision**, which records what was authorized. Keep the two apart: a waiver changes the decision, never the state.
+
+A phase advances only when every required check is **Passed**, or its non-Passed state is covered by a recorded waiver.
 
 | State | Meaning | Allowed to advance? |
 |---|---|---|
 | **Passed** | Executed or inspected, met the criterion, evidence attached, no workaround needed | Yes |
-| **Failed** | Executed or inspected and did not meet the criterion | No: fix, then re-check |
-| **Blocked** | Could not be evaluated because of a missing dependency, missing access or secret, environment restriction, or an unmade decision | No: unblock or get an explicit user decision |
-| **Not tested** | Never evaluated (skipped, out of time, out of scope) | No, unless the user explicitly waives it and the waiver is recorded |
+| **Failed** | Executed or inspected and did not meet the criterion | Only with a waiver; otherwise fix and re-check |
+| **Blocked** | Could not be evaluated because of a missing dependency, missing access or secret, environment restriction, or an unmade decision | Only with a waiver; otherwise unblock or get a decision |
+| **Not tested** | Never evaluated (skipped, out of time, out of scope) | Only with a waiver; otherwise run it |
 
 Rules:
 - **Evidence is required for Passed:** the exact command and its output, a file path or link, a screenshot, or a named reviewer's sign-off. "Looks fine" and "should work" are not evidence. If you did not run it, it is Not tested.
-- **A workaround is not a pass.** If something passed only after installing an undeclared package, stubbing a service, setting a fake secret, retrying until green, or loosening a test, record **Blocked** or **Failed** with the original failure visible and the workaround noted, and fix the root cause (for example declare the dependency) before marking Passed.
+- **Planned isolation is not a workaround.** A unit test that passes against a mock, stub, fake, or recorded fixture chosen in the test design is Passed (note the test double, and name the real boundary it does not exercise). See `qa-engineer`.
+- **A workaround added after a failure is not a pass.** If something went green only after installing an undeclared package, stubbing a module that failed to import, setting a fake secret, retrying until green, or loosening a test, record **Blocked** or **Failed** with the original failure visible and the workaround noted, and fix the root cause (for example declare the dependency) before marking Passed.
 - **Skipped and blocked tests are not passes.** Report counts separately and name what was not verified.
 - **Separate causes** when something fails: application bug, test defect, missing dependency, environment restriction (see `qa-engineer`).
-- **Waivers:** only the user (or accountable owner) can waive a Failed, Blocked or Not tested check. Record who, why, the risk accepted, and an expiry.
+- **Waivers record an authorization, not a result.** Only the user (or the accountable owner) can waive a Failed, Blocked or Not tested check. The check **keeps its true state** and stays visible in every later summary. The waiver is recorded separately with who authorized it, why, the risk accepted, and an expiry or re-check date, and it applies to that check only. Never edit a check to Passed because it was waived.
 - **Do not hide bad news in a summary.** If any check is not Passed, the first line of the gate summary says so.
 
 ### Gate summary format
 ```
-Phase: <name>    Tier: <0-3>    Decision: ADVANCE | HOLD
-| Check | State | Evidence | Owner / next action |
-Open risks: ...    Waivers: ...    Decision needed from you: ...
+Phase: <name>    Tier: <0-3>
+Advancement: ADVANCE | ADVANCE WITH WAIVERS | HOLD
+| Check | State | Evidence | Waiver (who / why / risk / expiry) | Owner / next action |
+Open risks: ...    Decision needed from you: ...
 ```
+`ADVANCE` means every required check is Passed. `ADVANCE WITH WAIVERS` means at least one required check is not Passed and each such check has a recorded waiver. Anything else is `HOLD`.
 
 ## Phases and gates (Tier 3; use the relevant subset for Tier 2)
 1. **Discover** - `product-manager`, `end-user-uat`, `business-analyst`. *Checks:* problem, personas, success metrics, scope and non-goals agreed; requirements testable and traced; top risks listed.
 2. **Design** - `ux-ui-designer`, `architect`, `security-engineer`, `data-engineer`, `compliance-privacy-officer`, `ai-ml-engineer` (if relevant). *Checks:* architecture, API and data models reviewed; NFRs measurable; threat model with mitigations; privacy and compliance obligations mapped; UX flows validated with users.
 3. **Plan** - `project-manager-scrum-master`, `engineering-manager-tech-lead`, `release-manager`. *Checks:* thin-slice backlog sequenced by risk; Definition of Done and standards set; repo and CI skeleton exist and run from a clean install.
 4. **Build** - `developer`, `data-engineer`, `ai-ml-engineer`, with `qa-engineer`, `security-engineer`, `technical-writer` in parallel. *Per slice:* Definition of Done for its tier met, dependencies declared and fresh-install clean, CI green, tests honestly reported.
-5. **Verify** - `qa-engineer`, `performance-engineer`, `security-engineer`, `end-user-uat`. *Checks:* no open Critical/High defects; performance budgets met; scans clean; failure paths and accessibility tested; UAT accepted; zero required checks Blocked or Not tested.
+5. **Verify** - `qa-engineer`, `performance-engineer`, `security-engineer`, `end-user-uat`. *Checks:* no open Critical/High defects; performance budgets met; scans clean; failure paths and accessibility tested; UAT accepted; no required check left Blocked or Not tested without a recorded waiver.
 6. **Release** - `release-manager`, `devops-engineer`, `sre-incident-manager`, `support-customer-success`. *Checks:* go/no-go evidence from every function; rollback rehearsed; monitoring, runbooks and on-call live; support ready; backup restore verified.
 7. **Operate & Learn** - `sre-incident-manager`, `devops-engineer`, `support-customer-success`, `product-manager`, `data-engineer`. *Continuous:* SLOs met; postmortem actions closed; metrics reviewed; feedback fed into Discover.
 

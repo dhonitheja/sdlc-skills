@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: waiver-keeps-true-state
+expected_outcome: |
+  The response advances with the waiver but keeps the 3 integration tests in their true Blocked state. It uses ADVANCE WITH WAIVERS (not a plain ADVANCE and not Passed), records who authorized the waiver, why, the risk accepted, and an expiry or re-check date (next sprint), and keeps the waived check visible in the summary. It does not argue with the owner's authority to waive.

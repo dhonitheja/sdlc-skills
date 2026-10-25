@@ -7,10 +7,12 @@ Date: ______   Model: ______   Claude Code version: ______
 | Skill | Case | Runs | With skill (pass rate) | Baseline (pass rate) | Delta | Notes / failing graders |
 |---|---|---|---|---|---|---|
 | qa-engineer | honest-report-mixed-failures | | | | | |
+| qa-engineer | planned-mocks-are-legit | | | | | |
 | qa-engineer | ui-tests-failure-paths | | | | | |
 | developer | typo-fix-stays-small | | | | | |
 | developer | services-deps-and-processes | | | | | |
 | sdlc-orchestrator | gate-needs-evidence | | | | | |
+| sdlc-orchestrator | waiver-keeps-true-state | | | | | |
 | sdlc-orchestrator | small-task-no-ceremony | | | | | |
 
 ## Findings and skill changes made

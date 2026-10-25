@@ -23,15 +23,28 @@ Process exists to manage risk. Applying a full release process to a typo fix was
 ## Before coding
 - Read the relevant requirement, acceptance criteria, ADRs and API contract (Tier 2+). If something is ambiguous, resolve it or record the assumption; do not silently guess.
 - Inspect the existing codebase conventions and follow them. Do not introduce a new framework or pattern without a reason recorded (ADR at Tier 3).
-- **Check the environment can run the code** (next section) before you write the change, so you do not mistake an environment problem for a code problem.
+- **Check the environment can run the code** before you write the change (proportionate to the tier, see the next section), so you do not mistake an environment problem for a code problem. For Tier 0 this is just running the one relevant check.
 
 ## Dependencies and environment checks
-Run these before declaring code working, and whenever imports change:
-1. **Declared vs used.** Compare what the code imports against what the manifest declares, in both directions. Missing declarations break fresh installs; unused declarations bloat and expand attack surface. Examples: Python `deptry .` or `pipreqs --diff`; Node `npx depcheck`; Go `go mod tidy -diff`; Java/Gradle dependency analysis plugins. If no tool is available, grep the imports and read the manifest.
-2. **Fresh-install check.** Install from the lockfile into a clean environment (new virtualenv, `npm ci`, fresh container) and run the tests there. "Works on my machine" with undeclared packages is a defect.
-3. **Fix the manifest, not the machine.** If you had to install something to make it run, add it to the manifest and lockfile (and say so). Do not leave a hidden manual step.
+
+**Scale the checks to the tier** (Step 0). Dependency work is for changes that affect dependencies or ship to others, not a reflex on every edit.
+
+| Tier | Dependency and environment checks |
+|---|---|
+| **0 Local fix** | None by default; do not run a dependency audit or a clean install. Only if the edit adds, removes, or changes an import or touches a manifest: check that one import against the manifest. |
+| **1 Small change** | Check declared-vs-imported for the files you touched. Run the relevant tests in the existing environment. Do a clean install only if you changed dependencies. |
+| **2 Feature** | Project-wide declared-vs-imported check when dependencies changed. Verify a lockfile install in a clean environment (locally or in CI) before calling it done if dependencies changed. |
+| **3 New system** | All of the checks below, enforced in CI (`devops-engineer`). |
+
+The checks:
+1. **Declared vs imported, in both directions, with different confidence.**
+   - **Imported but not declared (high confidence).** This breaks fresh installs. First rule out false alarms: standard-library or local modules, import name vs package name (`yaml` is PyYAML, `PIL` is Pillow), and dependencies provided transitively on purpose. Then declare it.
+   - **Declared but not imported (a candidate only).** Static tools miss real uses: dynamic imports (`importlib`, `__import__`, `require(variable)`), plugin and entry-point loading, modules named in config files or URLs (for example a database driver chosen by a connection string), framework conventions, build, test, lint and type-check tools run from the CLI or CI, type stubs, peer dependencies, optional extras, and packages used only in scripts or Docker. **Report these as candidates for removal, not as defects.** Before recommending removal, search config, scripts, CI and docs for the name, check whether it is a tool, then confirm by removing it in a clean environment and running the tests and build. Remove only with that evidence, or say plainly that it is unverified.
+   - Tools: Python `deptry .`; Node `npx depcheck`; Go `go mod tidy -diff`; Gradle/Maven dependency analysis. With no tool, grep the imports and read the manifest. Treat tool output as input to review, not a verdict.
+2. **Fresh-install check (when dependencies changed, or Tier 3).** Install from the lockfile into a clean environment (new virtualenv, `npm ci`, fresh container) and run the tests there. Working only because of undeclared packages on one machine is a defect.
+3. **Fix the manifest, not the machine.** If you had to install something to make it run, add it to the manifest and lockfile and say so. Do not leave a hidden manual step.
 4. **Distinguish problems.** A missing package, a blocked network call, an unset secret, and a real code error are different causes. Say which one you hit. If the environment prevents verifying something, say it was not verified; do not claim success.
-5. **Pin and review.** Pin versions via a lockfile, prefer well-maintained libraries, check licenses and known vulnerabilities for new dependencies.
+5. **Pin and review new dependencies.** Pin versions via a lockfile, prefer well-maintained libraries, and check license and known vulnerabilities when you add one.
 
 ## Running services and multi-service code
 - **Run each service in its own process**, with its own working directory, dependency environment (virtualenv or `node_modules`), port, and log stream. Do not import one service's modules into another service's process, and do not start two apps inside one interpreter.
@@ -68,4 +81,4 @@ Reproduce first, write a failing test, find the root cause rather than the sympt
 - **Tier 1:** plus regression test and lint/type check on touched code.
 - **Tier 2:** plus acceptance criteria met, docs for behavior changes, review done, migration and telemetry as needed, pipeline green.
 - **Tier 3:** plus scans clean, security and QA sign-off, deployed to staging and verified, runbooks, rollback plan.
-Report results using the pass / fail / blocked / not tested language from `qa-engineer`; never describe unverified work as done.
+Report results using the pass / fail / blocked / not tested language from `qa-engineer`; never describe unverified work as done. Planned test doubles (a mocked client in a unit test) are fine and are reported as such; a workaround added after a failure is not a clean pass.

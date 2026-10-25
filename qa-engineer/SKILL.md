@@ -22,7 +22,11 @@ When tests fail or cannot run, find out **why** before reporting. Sort every non
 How to find the cause: read the actual error, not just the exit code. An `ImportError` or `command not found` points to a dependency; a connection refused, 403 from a proxy, or unset secret points to the environment; an assertion that contradicts the written requirement while the code matches it points to a test defect; an assertion that the code violates against the requirement is an application bug. If you cannot tell, say "cause unconfirmed" and what evidence is missing.
 
 **Rules**
-1. **Never report a clean pass when a test needed a workaround.** If you installed a missing package, stubbed a service, set a fake secret, skipped a test, loosened an assertion, or retried until it passed, the result is not a clean pass. Report it as *Passed with workaround*, state what the workaround was, and show the original failure.
+1. **Tell planned test isolation apart from a workaround added after a failure.**
+   - **Planned isolation is legitimate.** Mocks, stubs, fakes, in-memory databases, recorded fixtures, and issued test credentials that are part of the test *design* make a real, valid pass. A unit test that mocks the HTTP client and passes is **Passed**; say that it ran against a test double. "Planned" means the isolation was chosen before the run, is visible in the test or the test plan, sits at a sensible boundary, and the real boundary is covered elsewhere (integration or contract test) or listed under *Not tested*. Do not call a mock a workaround, and do not downgrade a unit-test pass just because it uses one.
+   - **A workaround is introduced after a failure to get a green result:** installing an undeclared package, stubbing out a module that failed to import, setting a fake secret, skipping or loosening a test, or retrying until it passes. Such a result is not a clean pass. Report it as *Passed with workaround*, state what it was, and show the original failure.
+   - **The test for telling them apart:** would this setup have been chosen if nothing had failed? If yes, it is planned isolation. If it appeared in response to a red result, it is a workaround. If you cannot tell, describe what was done and let the reader judge.
+   - **A mocked pass says nothing about the real dependency.** Name the real boundaries the run did not exercise (for example "payment API not called; integration test not run").
 2. **Keep the original failure visible.** Quote the first failing output (command, exit code, error excerpt) in the report even after you fix or work around it. Do not overwrite it with the later green run.
 3. **Do not weaken a test to make it pass** and do not fix the application to make a wrong test pass. Decide which one is wrong first, using the requirement.
 4. **Count honestly.** Report `passed / failed / skipped / blocked / not run` counts separately. Skipped and blocked are not passes. State coverage of the requirements, not only the number of tests.
@@ -33,8 +37,9 @@ How to find the cause: read the actual error, not just the exit code. An `Import
 Command: <exact command>   Exit code: <n>
 Totals: passed N | failed N | blocked N | skipped N | not run N
 | Test / area | Result | Cause | Evidence / next action |
-Workarounds used: <none | list, each with the original failure>
-Not tested: <list with reason>
+Planned test doubles: <none | list, e.g. "HTTP client mocked in unit tests per test plan">
+Workarounds used (added after a failure): <none | list, each with the original failure>
+Not tested: <list with reason, including real boundaries not exercised>
 Verdict: Passed | Passed with workaround | Failed | Blocked | Not tested
 ```
 
@@ -44,7 +49,7 @@ Scale the strategy to the task (see the sizing note in `developer`): a one-line 
 2. **Test pyramid:** many fast unit tests, fewer integration/API tests, a small set of end-to-end tests for critical user journeys.
 3. **Traceability:** each requirement/acceptance criterion maps to at least one test.
 4. **Environments and data:** production-like staging, seeded and anonymized test data, no real PII. Before running, confirm the environment can run the suite (dependencies installed from the lockfile, services reachable, secrets present) and record what is missing.
-5. **Entry/exit criteria:** exit = all critical-path tests *Passed* (not "passed with workaround"), no open Critical/High defects, coverage and performance budgets met, security scan clean.
+5. **Entry/exit criteria:** exit = all critical-path tests *Passed* (not "passed with workaround"), no open Critical/High defects, coverage and performance budgets met, security scan clean. Record which test doubles the plan intends (for example "unit tests mock the payment API; one integration test hits the sandbox nightly") so a reader can tell planned isolation from a later workaround.
 
 ## Test types
 - **Unit:** pure logic, edge cases, boundaries, error paths. Judge quality by whether tests fail when behavior breaks (mutation testing or deliberately breaking the code), not by coverage percentage alone.
@@ -77,4 +82,4 @@ Report with: title, environment/build, steps to reproduce, expected vs actual, e
 Run lint, unit and integration tests on every PR; E2E smoke on merge to main; full suites nightly; publish reports with the cause breakdown; fail the build on regressions; track pass rate, flake rate, run time, and defect escape rate.
 
 ## Release sign-off report
-Summarize scope tested, results by type using the format above, open defects by severity, workarounds used, the *Not tested* list with reasons, performance vs budget, and a recommendation: **Go / Conditional go / No-go**. A sign-off cannot be Go while any required check is Failed, Blocked, or Not tested.
+Summarize scope tested, results by type using the format above, open defects by severity, workarounds used, the *Not tested* list with reasons, performance vs budget, and a recommendation: **Go / Conditional go / No-go**. A required check that is Failed, Blocked, or Not tested keeps that state in the report. The recommendation is **No-go** unless the accountable owner has recorded a waiver (who, why, risk accepted, expiry); with a waiver it is **Conditional go**, the waived checks stay listed with their true state, and the waiver is shown separately.
