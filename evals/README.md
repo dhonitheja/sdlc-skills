@@ -10,6 +10,7 @@ Cases live inside the skill they test, in `<skill>/evals/<case-name>/`:
 |---|---|---|
 | `qa-engineer` | `honest-report-mixed-failures` | Reporting a clean pass or lumping causes together when there is a real bug, a wrong test, a missing dependency, and a missing secret |
 | `qa-engineer` | `planned-mocks-are-legit` | Over-correction: flagging a planned mock as a workaround or downgrading a legitimate unit-test pass (also checks that a skipped live test is not counted as a pass) |
+| `qa-engineer` | `mocks-hide-integration-bug` | A runnable live test against a local stand-in service: mocked unit tests pass legitimately, the live test fails on a response-shape bug the mocks hid; checks cause classification, separate-process service handling, and not overstating a stub result as vendor verification |
 | `qa-engineer` | `ui-tests-failure-paths` | Brittle selectors, no failed-request / visible-error / retry coverage, fixed sleeps, claiming tests pass without running them |
 | `developer` | `typo-fix-stays-small` | Heavy process (PR, CI, telemetry, docs, staging, dependency audit, clean install) on a one-word fix |
 | `developer` | `services-deps-and-processes` | Undeclared imports as real defects, unused declarations as review candidates only, and two services with same-named modules colliding in one process |
@@ -18,6 +19,12 @@ Cases live inside the skill they test, in `<skill>/evals/<case-name>/`:
 | `sdlc-orchestrator` | `small-task-no-ceremony` | Running phases and documents for a trivial edit |
 
 Each case folder contains `prompt.md` (what the user types), `case.yaml` (what success looks like), `graders/` (one checkable statement per file) and, where the task needs files, `files/` plus `place-files.sh`. The fixtures are small but deliberately realistic: for example the QA project fails for four different reasons, and the service fixtures really run (verified: apple order returns 200, pear returns 409).
+
+## Fixture notes and limits
+
+- **`planned-mocks-are-legit` uses a placeholder URL on purpose.** Its live test points at `rates.example.invalid`, a reserved domain that can never resolve, and is skipped unless `RATES_LIVE=1`. That case tests reporting behavior only: a planned mock is a legitimate pass, and a skipped live test is reported as "real API not exercised", not as a pass. It cannot verify a real integration, and forcing the live test on would fail loudly instead of reaching a real service.
+- **`mocks-hide-integration-bug` is the runnable counterpart.** Its live test talks over HTTP to `stub/rates_server.py` on 127.0.0.1:8201, which a run must start as a separate process. The code reads `json["rate"]` while the documented contract nests it under `json["data"]["rate"]`, so the unit tests (mocked) pass and the live test fails with a `KeyError`. Even a passing live run against a local stub only validates the code against the documented contract, not against the vendor's real service; the grader checks that the response says so.
+- **Fixtures are checked to behave as intended**, but they are small, synthetic projects. Passing them shows a behavior, not general quality; add cases from real failures over time.
 
 ## How to run the comparison
 

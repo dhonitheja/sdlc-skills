@@ -8,6 +8,7 @@ Date: ______   Model: ______   Claude Code version: ______
 |---|---|---|---|---|---|---|
 | qa-engineer | honest-report-mixed-failures | | | | | |
 | qa-engineer | planned-mocks-are-legit | | | | | |
+| qa-engineer | mocks-hide-integration-bug | | | | | |
 | qa-engineer | ui-tests-failure-paths | | | | | |
 | developer | typo-fix-stays-small | | | | | |
 | developer | services-deps-and-processes | | | | | |
