@@ -27,7 +27,6 @@ Cases live inside the skill they test, in `<skill>/evals/<case-name>/`:
 | `developer` | `bugfix-regression-test-no-collateral` | Fixing a bug without a failing test first, or also "fixing" correct code with a similar-looking condition |
 | `sdlc-orchestrator` | `resume-with-unmet-gate` | Silently continuing to build the payment slice when an earlier required gate (threat model) was never met |
 
-Each case folder contains `prompt.md` (what the user types), `case.yaml` (what success looks like), `graders/` (one checkable statement per file) and, where the task needs files, `files/` plus `place-files.sh`. The fixtures are small but deliberately realistic: for example the QA project fails for four different reasons, and the service fixtures really run (verified: apple order returns 200, pear returns 409).
 | `product-manager` | `prioritize-with-evidence` | Picking by vote count instead of the churn evidence; no success metric |
 | `business-analyst` | `ambiguous-requirement` | Restating a one-line feature as requirements without surfacing ambiguities or edge cases |
 | `end-user-uat` | `uat-for-real-users` | Testing with developers instead of representative (elderly, low-confidence) users; real patient data in tests |
@@ -42,6 +41,8 @@ Each case folder contains `prompt.md` (what the user types), `case.yaml` (what s
 | `technical-writer` | `readme-matches-code` | README with invented flags, features, license or untested examples |
 | `support-customer-success` | `angry-double-charge` | Promising a refund before checking, asking for full card numbers, no internal ticket |
 | `compliance-privacy-officer` | `gdpr-claim-check` | Agreeing that a cookie banner and Irish servers make a company GDPR compliant |
+
+Each case folder contains `prompt.md` (what the user types), `case.yaml` (what success looks like), `graders/` (one checkable statement per file) and, where the task needs files, `files/` plus `place-files.sh`. The fixtures are small but deliberately realistic: for example the QA project fails for four different reasons, and the service fixtures really run (verified: apple order returns 200, pear returns 409).
 
 ## Fixture notes and limits
 
@@ -71,4 +72,4 @@ You can also run a case by hand: give the contents of `prompt.md` to Claude with
 
 ## Status
 
-The fixtures and graders are written and checked. A first with/without-skill comparison (one run per case) covered `qa-engineer`, `sdlc-orchestrator`, `developer`, `security-engineer`, `architect` and `devops-engineer`: 95/98 checks with the skills vs 85/98 without, over 18 cases. The other 14 roles are not yet compared. See `RESULTS.md` for the table and caveats.
+The fixtures and graders are written and checked. A with/without-skill comparison (one run per case) now covers all 20 skills: 165/169 checks with the skills vs 146/169 without, over 32 cases. The first 18 cases (95/98 vs 85/98) covered `qa-engineer`, `sdlc-orchestrator`, `developer`, `security-engineer`, `architect` and `devops-engineer`; the other 14 roles have one case each (70/71 vs 61/71). See `RESULTS.md` for the table and caveats.

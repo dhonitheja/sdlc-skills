@@ -22,9 +22,25 @@ Date: 2026-10-24   Model: claude-sonnet-5-5   Runs: 1 per case and configuration
 | qa-engineer | time-dependent-test | 1 | 6/6 | 5/6 | Same fix in both. Baseline never reproduced the off-hours failure |
 | developer | bugfix-regression-test-no-collateral | 1 | 5/5 | 4/5 | Both left `free_shipping` alone. Baseline did not show its new test failing before the fix |
 | sdlc-orchestrator | resume-with-unmet-gate | 1 | 6/6 | 5/6 | Both noticed the missing threat model and wrote one. Baseline used no gate states |
+| product-manager | prioritize-with-evidence | 1 | 5/5 | 4/5 | Both picked the onboarding checklist from the churn data. Baseline named a metric but gave no baseline or target |
+| business-analyst | ambiguous-requirement | 1 | 5/5 | 4/5 | Baseline had IDs and Given/When/Then but no must-have vs optional split |
+| end-user-uat | uat-for-real-users | 1 | 5/5 | 5/5 | Not discriminating: baseline also recruited elderly and assistive-tech users and used fake data |
+| ux-ui-designer | form-accessibility-review | 1 | 6/6 | 6/6 | Not discriminating: both found every issue and said no browser or screen reader was run |
+| project-manager-scrum-master | infeasible-plan | 1 | 5/5 | 4/5 | Both said it does not fit in 6 weeks. Baseline risks had no owners |
+| engineering-manager-tech-lead | style-war-and-debt | 1 | 5/5 | 5/5 | Not discriminating |
+| data-engineer | migration-safety-review | 1 | 5/5 | 4/5 | Baseline never said there is no down or rollback path |
+| ai-ml-engineer | rag-launch-readiness | 1 | 5/5 | 3/5 | Baseline's eval set had no adversarial or injection cases and it gave no prompt-injection defence |
+| performance-engineer | weak-load-test-claim | 1 | 5/5 | 5/5 | Not discriminating |
+| sre-incident-manager | blameless-postmortem | 1 | 5/5 | 4/5 | Baseline invented "the migration passed review"; the notes say nothing about review |
+| release-manager | go-no-go-with-gaps | 1 | 5/5 | 3/5 | Baseline gave a sensible no-go but used no check states and no owner waiver for unmet checks |
+| technical-writer | readme-matches-code | 1 | 4/5 | 4/5 | Both documented the real interface. Both stated a Python version nobody tested (3.8+ vs 3.6+) |
+| support-customer-success | angry-double-charge | 1 | 5/5 | 5/5 | Not discriminating |
+| compliance-privacy-officer | gdpr-claim-check | 1 | 5/5 | 5/5 | Not discriminating |
 
-Totals over the 18 cases: **with skill 95/98 checks, baseline 85/98**. Mean of per-case pass rates: 96.8% vs 87.1%.
-Cost: with-skill runs averaged about 44 s and 85.6k tokens; baseline about 30 s and 80.1k tokens.
+Totals over the first 18 cases: with skill 95/98 checks, baseline 85/98. Mean of per-case pass rates: 96.8% vs 87.1%.
+Totals over the 14 role cases added later: with skill 70/71, baseline 61/71 (mean 98.6% vs 85.7%).
+**All 32 cases: with skill 165/169 checks, baseline 146/169. Mean of per-case pass rates: 97.5% vs 86.5%.**
+Cost: with-skill runs averaged about 44 s and 85.6k tokens on the first 18 cases; baseline about 30 s and 80.1k tokens. On the 14 role cases: with skill about 38 s and 80.8k tokens, baseline about 31 s and 78.8k tokens (one with-skill run reported 24 minutes, almost certainly queue wait, and is left out of the time average).
 
 ## Findings
 
@@ -35,6 +51,9 @@ Cost: with-skill runs averaged about 44 s and 85.6k tokens; baseline about 30 s 
 - Security, architect and devops: the baseline matched the skill on most checks. The only miss was missing numeric targets in the architect baseline. These graders are likely too easy; add harder fixtures (more subtle vulnerabilities, a case where over-engineering is tempting).
 - The six harder cases separated the two groups more (33/35 vs 28/35) than the first twelve (62/63 vs 57/63). The consistent gaps: gate-state wording, numeric targets, reproducing a failure before fixing it, and showing a test fail before the fix.
 - `ci-green-but-broken` check 3 forbids any made-up token, but both runs used a dummy because the tests only check the `Bearer ` prefix. Reword it to allow a documented dummy value for tests that never call the real service, and keep the rotation check.
+- The 14 role cases: the skills helped most where they add a structure the model does not use by default. Release go/no-go (check states and owner waivers, 5/5 vs 3/5) and RAG launch readiness (adversarial eval cases and prompt-injection defence, 5/5 vs 3/5) showed the largest gaps. Smaller gaps: a metric with a baseline and target, a must/optional split in requirements, risk owners, an explicit "no down path" finding, and not inventing facts in a postmortem.
+- Six of the 14 role cases were not discriminating (UAT plan, form accessibility, style war, load-test claim, support reply, GDPR). Plain Claude already handles these well; the graders for them are probably too easy, or the skill adds little there.
+- `readme-matches-code` check 5 failed for both: neither tested a minimum Python version, yet both stated one. The with-skill reply admitted the version was inferred; the README itself still stated it. This points to a possible gap in the `technical-writer` skill: add a rule to mark untested versions as unknown.
 - No skill edits were made from these results.
 
 ## Limits
@@ -42,4 +61,6 @@ Cost: with-skill runs averaged about 44 s and 85.6k tokens; baseline about 30 s 
 - One run each; differences of one check are within noise.
 - The same session wrote the skills, ran the comparison and graded it. Graders were applied against the written assertions, and objective checks (selectors, sleeps, fixture hashes, stub cleanup) were done with commands, but an independent review would be stronger.
 - `commands.log` files are self-reported by the run agents.
-- 14 other roles are unmeasured. The developer and the security, architect and devops cases were run later, in separate batches.
+- Every one of the 20 skills now has at least one compared case, but most roles have only one. A single case per role is a spot check, not a measure of the role.
+- The 14 role cases were graded after reading each reply and, where a check depended on a file the run wrote (the cancel-order requirements, the postmortems, the README), after reading that file. The fixtures are small and synthetic.
+- The developer and the security, architect and devops cases were run later, in separate batches.

@@ -101,7 +101,7 @@ The skills enforce evidence-based reporting and scale the process to the task:
 
 Whether these changes actually improve Claude's behavior is measured with the cases in [`evals/`](evals/README.md) (with-skill vs baseline).
 
-**First comparison (October 2026, one run per case and configuration, `qa-engineer`, `sdlc-orchestrator`, `developer`, `security-engineer`, `architect` and `devops-engineer`):** 95 of 98 checks passed with the skills, 85 of 98 without across 18 cases. Most of the gap comes from these:
+**Comparison (October 2026, one run per case and configuration, all 20 skills):** 165 of 169 checks passed with the skills, 146 of 169 without, across 32 cases. The first 18 cases (`qa-engineer`, `sdlc-orchestrator`, `developer`, `security-engineer`, `architect`, `devops-engineer`) scored 95/98 vs 85/98, and the other 14 roles, one case each, scored 70/71 vs 61/71. Most of the gap comes from these:
 
 - `gate-needs-evidence`: without the skill, Claude gave a sensible NO-GO but did not use the Passed/Failed/Blocked/Not tested states and never said that only the owner can waive a check (4/6 vs 6/6).
 - `ui-tests-failure-paths`: without the skill, Claude used fixed `waitForTimeout` sleeps; with it, tests used auto-waiting assertions (5/6 vs 6/6).
@@ -109,9 +109,12 @@ Whether these changes actually improve Claude's behavior is measured with the ca
 - `typo-fix-stays-small`: without the skill, the reply never said whether the test had been run (4/4 vs 3/4).
 - `right-sized-architecture`: without the skill, the design was right-sized but had no numeric response-time, availability or recovery targets (6/6 vs 5/6).
 - Harder cases: without the skill, Claude gave no numeric availability/recovery targets for an invoicing app, never reproduced a time-dependent test failure before fixing it, did not show a regression test failing first, and did not use gate states when resuming a project with a skipped threat model (`resist-overengineering-pressure` 6/6 vs 4/6, `time-dependent-test` 6/6 vs 5/6, `bugfix-regression-test-no-collateral` 5/5 vs 4/5, `resume-with-unmet-gate` 6/6 vs 5/6).
+- `go-no-go-with-gaps` (5/5 vs 3/5): without the skill, Claude gave a sensible no-go but used no Passed/Failed/Blocked/Not tested states and did not require an owner waiver for the unmet checks.
+- `rag-launch-readiness` (5/5 vs 3/5): without the skill, the evaluation set had no adversarial or prompt-injection cases and the safeguards did not defend against injection.
+- Smaller gaps in the other role cases: no baseline or target for the success metric, no must-have vs optional split in requirements, no owner for each risk, no mention that a migration has no down path, and an invented fact ("the migration passed review") in a postmortem.
 - `small-task-no-ceremony`: the skill version was slightly wordier than the limit set by the check (3/4 vs 4/4). It did not add process.
 
-On eight cases (honest mixed failures, planned mocks, mocks hiding a bug, waiver keeps true state, two security reviews, two CI setups) the baseline did just as well. Plain Claude already reports honestly when it is asked to. Treat these results as a first signal, not proof: one run each is noisy, the other 14 roles are not yet compared, and a port collision affected one baseline run. Details and caveats are in [`evals/RESULTS.md`](evals/RESULTS.md).
+On fourteen cases (honest mixed failures, planned mocks, mocks hiding a bug, waiver keeps true state, two security reviews, two CI setups, and the UAT plan, form accessibility, style war, load-test claim, support reply and GDPR cases) the baseline did just as well. Plain Claude already handles those well when asked. Treat these results as a first signal, not proof: one run each is noisy, each of the 14 added roles has a single case, the same session wrote the skills and graded the runs, and a port collision affected one baseline run. Details and caveats are in [`evals/RESULTS.md`](evals/RESULTS.md).
 
 ## Install
 
