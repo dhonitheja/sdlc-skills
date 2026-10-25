@@ -57,4 +57,4 @@ You can also run a case by hand: give the contents of `prompt.md` to Claude with
 
 ## Status
 
-The fixtures and graders are written and checked. A first with/without-skill comparison (one run per case) covered `qa-engineer`, `sdlc-orchestrator`, `developer`, `security-engineer`, `architect` and `devops-engineer`: 62/63 checks with the skills vs 57/63 without. The other 14 roles are not yet compared. See `RESULTS.md` for the table and caveats.
+The fixtures and graders are written and checked. A first with/without-skill comparison (one run per case) covered `qa-engineer`, `sdlc-orchestrator`, `developer`, `security-engineer`, `architect` and `devops-engineer`: 95/98 checks with the skills vs 85/98 without, over 18 cases. The other 14 roles are not yet compared. See `RESULTS.md` for the table and caveats.

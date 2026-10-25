@@ -16,9 +16,15 @@ Date: 2026-10-24   Model: claude-sonnet-5-5   Runs: 1 per case and configuration
 | devops-engineer | ci-with-dependency-gate | 1 | 6/6 | 6/6 | Not discriminating. Both caught the missing yaml, ran services separately and said CI was not run on GitHub. Skill run labelled flask a 'candidate'; baseline said 'probably drop it' |
 | developer | typo-fix-stays-small | 1 | 4/4 | 3/4 | Baseline fixed the typo correctly but its reply never said whether the test was run |
 | developer | services-deps-and-processes | 1 | 5/5 | 4/5 | Both found the missing PyYAML and ran separate processes. Baseline called flask flatly 'never used' and told the user to drop it without review; the skill run called it a candidate. The baseline ran after the skill run (no port collision) |
+| security-engineer | subtle-vulns-and-decoys | 1 | 6/6 | 6/6 | Hard case, still not discriminating: baseline found pickle RCE, traversal, SSRF and ignored the decoys |
+| architect | resist-overengineering-pressure | 1 | 6/6 | 4/6 | Both pushed back on Kubernetes/Kafka. Baseline gave no availability, recovery or response-time targets and only mentioned idempotent jobs, not idempotent invoice/payment creation |
+| devops-engineer | ci-green-but-broken | 1 | 4/6 | 4/6 | Both removed `\|\| true` / `continue-on-error`. Both used a dummy API_TOKEN and neither said the echoed token should be rotated (grader may be too strict about the dummy token) |
+| qa-engineer | time-dependent-test | 1 | 6/6 | 5/6 | Same fix in both. Baseline never reproduced the off-hours failure |
+| developer | bugfix-regression-test-no-collateral | 1 | 5/5 | 4/5 | Both left `free_shipping` alone. Baseline did not show its new test failing before the fix |
+| sdlc-orchestrator | resume-with-unmet-gate | 1 | 6/6 | 5/6 | Both noticed the missing threat model and wrote one. Baseline used no gate states |
 
-Totals over the 12 cases: **with skill 62/63 checks, baseline 57/63**. Mean of per-case pass rates: 97.9% vs 90.7%.
-Cost: with-skill runs averaged about 45 s and 86.1k tokens; baseline about 32 s and 81.5k tokens.
+Totals over the 18 cases: **with skill 95/98 checks, baseline 85/98**. Mean of per-case pass rates: 96.8% vs 87.1%.
+Cost: with-skill runs averaged about 44 s and 85.6k tokens; baseline about 30 s and 80.1k tokens.
 
 ## Findings
 
@@ -27,6 +33,8 @@ Cost: with-skill runs averaged about 45 s and 86.1k tokens; baseline about 32 s 
 - The brevity check in `small-task-no-ceremony` is subjective; a five-sentence reply that adds no process should probably pass. Reword the grader.
 - Developer: the skill's "candidate, not defect" rule for unused dependencies made a visible difference; the typo case showed no extra process from either side.
 - Security, architect and devops: the baseline matched the skill on most checks. The only miss was missing numeric targets in the architect baseline. These graders are likely too easy; add harder fixtures (more subtle vulnerabilities, a case where over-engineering is tempting).
+- The six harder cases separated the two groups more (33/35 vs 28/35) than the first twelve (62/63 vs 57/63). The consistent gaps: gate-state wording, numeric targets, reproducing a failure before fixing it, and showing a test fail before the fix.
+- `ci-green-but-broken` check 3 forbids any made-up token, but both runs used a dummy because the tests only check the `Bearer ` prefix. Reword it to allow a documented dummy value for tests that never call the real service, and keep the rotation check.
 - No skill edits were made from these results.
 
 ## Limits
