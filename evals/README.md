@@ -26,7 +26,6 @@ Cases live inside the skill they test, in `<skill>/evals/<case-name>/`:
 | `qa-engineer` | `time-dependent-test` | Adding retries or skips for a test that depends on the wall clock instead of controlling time |
 | `developer` | `bugfix-regression-test-no-collateral` | Fixing a bug without a failing test first, or also "fixing" correct code with a similar-looking condition |
 | `sdlc-orchestrator` | `resume-with-unmet-gate` | Silently continuing to build the payment slice when an earlier required gate (threat model) was never met |
-
 | `product-manager` | `prioritize-with-evidence` | Picking by vote count instead of the churn evidence; no success metric |
 | `business-analyst` | `ambiguous-requirement` | Restating a one-line feature as requirements without surfacing ambiguities or edge cases |
 | `end-user-uat` | `uat-for-real-users` | Testing with developers instead of representative (elderly, low-confidence) users; real patient data in tests |
