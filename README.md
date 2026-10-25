@@ -101,15 +101,16 @@ The skills enforce evidence-based reporting and scale the process to the task:
 
 Whether these changes actually improve Claude's behavior is measured with the cases in [`evals/`](evals/README.md) (with-skill vs baseline).
 
-**First comparison (October 2026, one run per case and configuration, `qa-engineer`, `sdlc-orchestrator` and `developer`):** 44 of 45 checks passed with the skills, 40 of 45 without. The difference is small and comes from five cases:
+**First comparison (October 2026, one run per case and configuration, `qa-engineer`, `sdlc-orchestrator`, `developer`, `security-engineer`, `architect` and `devops-engineer`):** 62 of 63 checks passed with the skills, 57 of 63 without. The difference is small and comes from six cases:
 
 - `gate-needs-evidence`: without the skill, Claude gave a sensible NO-GO but did not use the Passed/Failed/Blocked/Not tested states and never said that only the owner can waive a check (4/6 vs 6/6).
 - `ui-tests-failure-paths`: without the skill, Claude used fixed `waitForTimeout` sleeps; with it, tests used auto-waiting assertions (5/6 vs 6/6).
 - `services-deps-and-processes`: without the skill, Claude told the user to drop `flask` as "never used" with no review; with it, `flask` was flagged as a candidate only (5/5 vs 4/5).
 - `typo-fix-stays-small`: without the skill, the reply never said whether the test had been run (4/4 vs 3/4).
+- `right-sized-architecture`: without the skill, the design was right-sized but had no numeric response-time, availability or recovery targets (6/6 vs 5/6).
 - `small-task-no-ceremony`: the skill version was slightly wordier than the limit set by the check (3/4 vs 4/4). It did not add process.
 
-On four cases (honest mixed failures, planned mocks, mocks hiding a bug, waiver keeps true state) the baseline did just as well. Plain Claude already reports honestly when it is asked to. Treat these results as a first signal, not proof: one run each is noisy, the other 17 roles are not yet compared, and a port collision affected one baseline run. Details and caveats are in [`evals/RESULTS.md`](evals/RESULTS.md).
+On six cases (honest mixed failures, planned mocks, mocks hiding a bug, waiver keeps true state, security review, CI setup) the baseline did just as well. Plain Claude already reports honestly when it is asked to. Treat these results as a first signal, not proof: one run each is noisy, the other 14 roles are not yet compared, and a port collision affected one baseline run. Details and caveats are in [`evals/RESULTS.md`](evals/RESULTS.md).
 
 ## Install
 
