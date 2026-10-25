@@ -17,6 +17,9 @@ Cases live inside the skill they test, in `<skill>/evals/<case-name>/`:
 | `sdlc-orchestrator` | `gate-needs-evidence` | Advancing on skipped tests, a workaround pass, and an un-run security scan |
 | `sdlc-orchestrator` | `waiver-keeps-true-state` | Rewriting a waived check as Passed, or refusing a legitimate owner waiver; the waiver must be recorded separately and the check keep its true state |
 | `sdlc-orchestrator` | `small-task-no-ceremony` | Running phases and documents for a trivial edit |
+| `security-engineer` | `review-finds-real-vulns` | Missing a SQL injection, hardcoded key or weak hashing; flagging safe code as vulnerable; calling a partial review a full audit |
+| `architect` | `right-sized-architecture` | Over-engineering a 25-person internal tool; vague non-functional requirements; no data-level double-booking protection |
+| `devops-engineer` | `ci-with-dependency-gate` | A CI file with no dependency gate, failing on unused packages, or claiming CI is green without running it |
 
 Each case folder contains `prompt.md` (what the user types), `case.yaml` (what success looks like), `graders/` (one checkable statement per file) and, where the task needs files, `files/` plus `place-files.sh`. The fixtures are small but deliberately realistic: for example the QA project fails for four different reasons, and the service fixtures really run (verified: apple order returns 200, pear returns 409).
 

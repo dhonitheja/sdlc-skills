@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: right-sized-architecture
+expected_outcome: |
+  A proportionate design for ~25 users (a single deployable app with a relational database on simple managed hosting), with measurable non-functional targets sized to that scale, an explicit strategy for preventing double bookings, at least one decision recorded with alternatives and trade-offs and a trigger to revisit it, and stated assumptions about things the user did not say.

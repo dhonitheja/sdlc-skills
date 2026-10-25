@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: review-finds-real-vulns
+expected_outcome: |
+  The review finds the SQL injection in get_user, the hardcoded production payment key (and says rotate it), and the unsalted MD5 password hashing. It does not report the parameterized get_order query or the list-argument subprocess call as vulnerabilities. The verdict is not to release until Critical/High items are fixed, and the response says plainly what the review did not cover.
+context:
+  scaffold_script: place-files.sh
