@@ -48,4 +48,4 @@ You can also run a case by hand: give the contents of `prompt.md` to Claude with
 
 ## Status
 
-The fixtures and graders are written and the fixtures were checked to behave as designed. **No with/without-skill comparison has been run yet**, so the effectiveness of the current skills is unmeasured until `RESULTS.md` is filled in.
+The fixtures and graders are written and checked. A first with/without-skill comparison (one run per case) covered `qa-engineer` and `sdlc-orchestrator`: 35/36 checks with the skills vs 33/36 without. The `developer` cases and the other roles are not yet compared. See `RESULTS.md` for the table and caveats.

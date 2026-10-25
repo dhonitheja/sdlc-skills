@@ -99,7 +99,15 @@ The skills enforce evidence-based reporting and scale the process to the task:
 - **Task-size tiers:** a typo fix does not trigger PRs, telemetry, dependency audits, clean installs or staging deployment; new products and high-risk changes get the full process.
 - **Dependency and environment checks (scaled by tier):** imported-but-undeclared packages are treated as defects; declared-but-unused packages are only candidates for review, because dynamic imports, plugins and build tools escape static analysis. Services run in separate processes.
 
-Whether these changes actually improve Claude's behavior is measured with the cases in [`evals/`](evals/README.md) (with-skill vs baseline). That comparison has not been run yet; see `evals/RESULTS.md` for status.
+Whether these changes actually improve Claude's behavior is measured with the cases in [`evals/`](evals/README.md) (with-skill vs baseline).
+
+**First comparison (October 2026, one run per case and configuration, `qa-engineer` and `sdlc-orchestrator` only):** 35 of 36 checks passed with the skills, 33 of 36 without. The difference is small and comes from three cases:
+
+- `gate-needs-evidence`: without the skill, Claude gave a sensible NO-GO but did not use the Passed/Failed/Blocked/Not tested states and never said that only the owner can waive a check (4/6 vs 6/6).
+- `ui-tests-failure-paths`: without the skill, Claude used fixed `waitForTimeout` sleeps; with it, tests used auto-waiting assertions (5/6 vs 6/6).
+- `small-task-no-ceremony`: the skill version was slightly wordier than the limit set by the check (3/4 vs 4/4). It did not add process.
+
+On four cases (honest mixed failures, planned mocks, mocks hiding a bug, waiver keeps true state) the baseline did just as well. Plain Claude already reports honestly when it is asked to. Treat these results as a first signal, not proof: one run each is noisy, the developer skill and the other 17 roles are not yet compared, and a port collision affected one baseline run. Details and caveats are in [`evals/RESULTS.md`](evals/RESULTS.md).
 
 ## Install
 
